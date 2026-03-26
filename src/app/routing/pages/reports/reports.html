@@ -1,0 +1,15 @@
+@if (loading()) {
+  <p>Loading…</p>
+} @else {
+  @let list = reportData();
+  @if (list) {
+    <p>Total: {{ list.totalRecords }}</p>
+
+    @for (item of list.fwbData; track item.fWB_Details.Sequence) {
+      <div>{{ item.fWB_Details.AWBID }}</div>
+    }
+  } @else {
+    <p>Нет данных</p>
+  }
+}
+

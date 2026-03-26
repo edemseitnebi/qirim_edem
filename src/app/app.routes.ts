@@ -1,3 +1,5 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { routes as pagesRoutes } from './routing/pages/pages-routing';
+
+export const routes: Routes = [...pagesRoutes];
