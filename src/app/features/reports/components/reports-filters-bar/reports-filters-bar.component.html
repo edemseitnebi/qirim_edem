@@ -1,18 +1,18 @@
 <div class="filters-row">
-  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+  <mat-form-field class="filters-row__date-field" appearance="outline" subscriptSizing="dynamic">
     <mat-label>Date range</mat-label>
     <mat-date-range-input [rangePicker]="picker">
       <input
         matStartDate
         placeholder="dd.mm.yyyy"
         [value]="dateRange.fromDate"
-        (dateChange)="onFromDateInputChange($event.value)"
+        (dateChange)="onDateInputChange('from', $event.value)"
       />
       <input
         matEndDate
         placeholder="dd.mm.yyyy"
         [value]="dateRange.untilDate"
-        (dateChange)="onUntilDateInputChange($event.value)"
+        (dateChange)="onDateInputChange('until', $event.value)"
       />
     </mat-date-range-input>
     @if (hasDateRangeValue) {
@@ -32,7 +32,7 @@
     <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>
 
-  <button mat-flat-button color="primary" type="button" (click)="onApplyClick()">
+  <button mat-flat-button color="primary" type="button" (click)="apply.emit()">
     <mat-icon>search</mat-icon>
     <span>Apply</span>
   </button>

@@ -1,3 +1,5 @@
+@use '../../../styles/reports-colors' as colors;
+
 .reports-page {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
@@ -43,10 +45,10 @@
 }
 
 .table-container {
-  border: 1px solid #e1e1e1;
+  border: 1px solid colors.$border-light;
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: colors.$white;
   flex: 1;
   min-height: 0;
   display: flex;
@@ -58,7 +60,7 @@
   gap: 8px;
   align-items: center;
   padding: 10px 12px;
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid colors.$divider;
   background: #f8f8f8;
 }
 
@@ -77,7 +79,16 @@
 }
 
 .loading-wrap {
-  padding: 0;
+  height: 4px;
+  overflow: hidden;
+}
+
+.loading-wrap mat-progress-bar {
+  opacity: 0;
+}
+
+.loading-wrap--active mat-progress-bar {
+  opacity: 1;
 }
 
 .empty-state {

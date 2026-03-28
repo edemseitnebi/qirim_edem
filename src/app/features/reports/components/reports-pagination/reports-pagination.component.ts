@@ -16,25 +16,9 @@ export class ReportsPaginationComponent {
   @Output() public readonly pageChange = new EventEmitter<number>();
   @Output() public readonly pageSizeChange = new EventEmitter<number>();
 
-  protected get currentPage(): number {
-    return this.paginatorData.currentPage;
-  }
-
-  protected get totalPages(): number {
-    return this.paginatorData.totalPages;
-  }
-
-  protected get pageSize(): number {
-    return this.paginatorData.pageSize;
-  }
-
-  protected get pageSizeOptions(): number[] {
-    return this.paginatorData.pageSizeOptions;
-  }
-
   protected get visiblePages(): (number | 'dots')[] {
-    const total = Math.max(1, this.totalPages);
-    const current = Math.min(Math.max(1, this.currentPage), total);
+    const total = Math.max(1, this.paginatorData.totalPages);
+    const current = Math.min(Math.max(1, this.paginatorData.currentPage), total);
 
     if (total <= 5) {
       return Array.from({ length: total }, (_, index) => index + 1);
@@ -67,47 +51,31 @@ export class ReportsPaginationComponent {
   }
 
   protected get canGoPrev(): boolean {
-    return this.currentPage > 1;
+    return this.paginatorData.currentPage > 1;
   }
 
   protected get canGoNext(): boolean {
-    return this.currentPage < this.totalPages;
+    return this.paginatorData.currentPage < this.paginatorData.totalPages;
   }
 
   protected isCurrentPage(page: number): boolean {
-    return this.currentPage === page;
+    return this.paginatorData.currentPage === page;
   }
 
   protected onPageSizeSelectionChange(value: number | null | undefined): void {
     this.onPageSizeChanged(value ?? 0);
   }
 
-  protected onPrevKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
+  protected handleA11yKeydown(event: KeyboardEvent, action: 'prev' | 'next' | 'page', page?: number): void {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
     event.preventDefault();
-    this.goPrev();
-  }
-
-  protected onNextKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-    event.preventDefault();
-    this.goNext();
-  }
-
-  protected onPageKeydown(event: KeyboardEvent, page: number): void {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-    event.preventDefault();
-    this.goToPage(page);
+    if (action === 'prev') this.goPrev();
+    else if (action === 'next') this.goNext();
+    else if (page !== undefined) this.goToPage(page);
   }
 
   protected goToPage(page: number): void {
-    if (page < 1 || page > this.totalPages || page === this.currentPage) {
+    if (page < 1 || page > this.paginatorData.totalPages || page === this.paginatorData.currentPage) {
       return;
     }
 
@@ -115,15 +83,15 @@ export class ReportsPaginationComponent {
   }
 
   protected goPrev(): void {
-    this.goToPage(this.currentPage - 1);
+    this.goToPage(this.paginatorData.currentPage - 1);
   }
 
   protected goNext(): void {
-    this.goToPage(this.currentPage + 1);
+    this.goToPage(this.paginatorData.currentPage + 1);
   }
 
   protected onPageSizeChanged(nextPageSize: number): void {
-    if (!nextPageSize || nextPageSize === this.pageSize) {
+    if (!nextPageSize || nextPageSize === this.paginatorData.pageSize) {
       return;
     }
 

@@ -1,5 +1,6 @@
 //материал не поддерживает пагинацию по страницам, нужен кастомный пагинатор
 // https://codepen.io/arefeh_htmi/pen/ExKewzW
+@use '../../../../../styles/reports-colors' as colors;
 
 .reports-pagination {
   display: block;
@@ -14,22 +15,16 @@
 
 .reports-pagination__size-label {
   font-size: 12px;
-  color: #6f6f6f;
+  color: colors.$text-muted;
   white-space: nowrap;
 }
 
 .reports-pagination__size-field {
   width: 88px;
-}
-
-:host ::ng-deep .reports-pagination__size .mat-mdc-form-field-subscript-wrapper {
-  display: none;
-}
-
-:host ::ng-deep .reports-pagination__size .mat-mdc-form-field-infix {
-  min-height: 34px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  --mat-form-field-container-height: 34px;
+  --mat-form-field-container-vertical-padding: 6px;
+  --mat-form-field-subscript-text-size: 0;
+  --mat-form-field-subscript-text-line-height: 0;
 }
 
 .reports-pagination__list {
@@ -42,8 +37,8 @@
   margin: 0;
   padding: 4px 8px;
   border-radius: 8px;
-  border: 1px solid #e1e1e1;
-  background: #fff;
+  border: 1px solid colors.$border-light;
+  background: colors.$white;
   list-style: none;
 }
 
@@ -70,7 +65,7 @@
 }
 
 .reports-pagination__number {
-  color: #6f6f6f;
+  color: colors.$text-muted;
   cursor: pointer;
   user-select: none;
 }
@@ -98,7 +93,7 @@
 }
 
 .reports-pagination__btn--active {
-  color: #6f6f6f;
+  color: colors.$text-muted;
   pointer-events: auto;
   cursor: pointer;
 }

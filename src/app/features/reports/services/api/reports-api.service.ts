@@ -68,6 +68,7 @@ export class ReportsApiService {
           fwbData: res.fwb_data.map(mapRecord),
           totalRecords: res.totalRecords,
         })),
+        //все ошибки перехватываются интерсептором и дергают сервис notification
         catchError(() => of(null)),
       );
   }

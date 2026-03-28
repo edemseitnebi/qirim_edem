@@ -9,8 +9,11 @@
   margin-right: 4px;
 }
 
-:host ::ng-deep .filters-row .mat-mdc-form-field-subscript-wrapper {
-  display: none;
+.filters-row__date-field {
+  --mat-form-field-container-height: 44px;
+  --mat-form-field-container-vertical-padding: 10px;
+  --mat-form-field-subscript-text-size: 0;
+  --mat-form-field-subscript-text-line-height: 0;
 }
 
 @media (max-width: 1199px) {

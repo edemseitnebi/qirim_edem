@@ -28,29 +28,10 @@ export class ReportsFiltersBarComponent {
     this.clearRange.emit();
   }
 
-  protected onApplyClick(): void {
-    this.apply.emit();
-  }
-
-  protected onFromDateInputChange(value: Date | null | undefined): void {
-    this.onFromDateChange(value ?? null);
-  }
-
-  protected onUntilDateInputChange(value: Date | null | undefined): void {
-    this.onUntilDateChange(value ?? null);
-  }
-
-  protected onFromDateChange(fromDate: Date | null): void {
+  protected onDateInputChange(field: 'from' | 'until', value: Date | null | undefined): void {
     this.dateRangeChange.emit({
-      fromDate,
-      untilDate: this.dateRange.untilDate,
-    });
-  }
-
-  protected onUntilDateChange(untilDate: Date | null): void {
-    this.dateRangeChange.emit({
-      fromDate: this.dateRange.fromDate,
-      untilDate,
+      fromDate: field === 'from' ? (value ?? null) : this.dateRange.fromDate,
+      untilDate: field === 'until' ? (value ?? null) : this.dateRange.untilDate,
     });
   }
 }

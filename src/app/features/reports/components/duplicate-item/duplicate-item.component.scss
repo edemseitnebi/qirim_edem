@@ -1,7 +1,9 @@
+@use '../../../../../styles/reports-colors' as colors;
+
 .duplicate-card {
   border: 1px solid #d7d7d7;
   border-radius: 8px;
-  background: #fff;
+  background: colors.$white;
   padding: 8px;
   cursor: pointer;
 }

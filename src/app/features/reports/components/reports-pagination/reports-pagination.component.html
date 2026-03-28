@@ -4,10 +4,10 @@
     <span class="reports-pagination__size-label">Rows per page:</span>
     <mat-form-field class="reports-pagination__size-field" appearance="outline" subscriptSizing="dynamic">
       <mat-select
-        [value]="pageSize"
+        [value]="paginatorData.pageSize"
         (selectionChange)="onPageSizeSelectionChange($event.value)"
       >
-        @for (option of pageSizeOptions; track option) {
+        @for (option of paginatorData.pageSizeOptions; track option) {
           <mat-option [value]="option">{{ option }}</mat-option>
         }
       </mat-select>
@@ -18,7 +18,7 @@
       class="reports-pagination__btn"
       [class.reports-pagination__btn--active]="canGoPrev"
       (click)="goPrev()"
-      (keydown)="onPrevKeydown($event)"
+      (keydown)="handleA11yKeydown($event, 'prev')"
       tabindex="0"
       role="button"
     >
@@ -33,7 +33,7 @@
           class="reports-pagination__number"
           [class.reports-pagination__number--active]="isCurrentPage(page)"
           (click)="goToPage(page)"
-          (keydown)="onPageKeydown($event, page)"
+          (keydown)="handleA11yKeydown($event, 'page', page)"
           tabindex="0"
           role="button"
         >
@@ -46,7 +46,7 @@
       class="reports-pagination__btn"
       [class.reports-pagination__btn--active]="canGoNext"
       (click)="goNext()"
-      (keydown)="onNextKeydown($event)"
+      (keydown)="handleA11yKeydown($event, 'next')"
       tabindex="0"
       role="button"
     >

@@ -19,11 +19,9 @@
 
       </div>
       <div class="table-container" [class.table-loading]="isLoading">
-        @if (isLoading) {
-          <div class="loading-wrap">
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-          </div>
-        }
+        <div class="loading-wrap" [class.loading-wrap--active]="isLoading">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
         @let list = recordsData();
         @if (list && list.fwbData.length > 0) {
           <div

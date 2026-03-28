@@ -97,6 +97,7 @@ export class ReportsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.facade.syncQueryParamsOnInit();
+    this.initDateRangeFromFilters();
   }
 
   protected onMatSort(event: Sort): void {
@@ -167,6 +168,14 @@ export class ReportsComponent implements OnInit {
     }
 
     return date.toISOString().replace('Z', '+00:00');
+  }
+
+  private initDateRangeFromFilters(): void {
+    const { from, until } = this.filters();
+    this.dateRange.set({
+      fromDate: from ? new Date(from) : null,
+      untilDate: until ? new Date(until) : null,
+    });
   }
 
   private isReportSortName(value: string): value is ReportSortName {

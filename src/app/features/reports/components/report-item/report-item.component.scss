@@ -1,11 +1,14 @@
+@use '../../../../../styles/reports-colors' as colors;
+
 .report-row {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid colors.$divider;
   cursor: pointer;
-  background: #fff;
+
+  background: colors.$white;
   transition: background-color 0.15s ease;
 }
 
@@ -84,7 +87,7 @@
 .drag-handle {
   border: 0;
   background: transparent;
-  color: #6f6f6f;
+  color: colors.$text-muted;
   cursor: grab;
   display: flex;
   align-items: center;
@@ -97,7 +100,7 @@
 }
 
 .report-expanded {
-  border-bottom: 1px solid #ececec;
+  border-bottom: 1px solid colors.$divider;
   background: #fafafa;
   padding: 10px 12px;
   display: grid;
@@ -113,11 +116,9 @@
 
 @media (max-width: 1199px) {
   .report-row {
-    margin: 10px;
-    margin-bottom: 0;
-    border: 1px solid #e1e1e1;
+    margin: 10px 10px 0;
     border-radius: 12px;
-    border-bottom: 1px solid #e1e1e1;
+    border: 1px solid colors.$border-light;
     padding: 20px 14px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
@@ -136,7 +137,7 @@
 
   .cell-label {
     display: inline;
-    color: #6f6f6f;
+    color: colors.$text-muted;
     font-size: 12px;
     line-height: 1.2;
   }
@@ -169,7 +170,7 @@
 
   .report-expanded {
     margin: 0 10px 10px;
-    border: 1px solid #e1e1e1;
+    border: 1px solid colors.$border-light;
     border-top: 0;
     border-radius: 0 0 12px 12px;
     padding: 14px;

@@ -6,6 +6,11 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+$white: #fff;
+$border-light: #e1e1e1;
+$divider: #ececec;
+$text-muted: #6f6f6f;
+
 html {
   @include mat.theme((
     color: (
