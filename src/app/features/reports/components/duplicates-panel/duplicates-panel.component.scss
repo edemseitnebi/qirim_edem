@@ -1,0 +1,28 @@
+.duplicates-panel {
+  border: 1px dashed #b8b8b8;
+  border-radius: 8px;
+  background: #fafafa;
+  padding: 12px;
+  min-height: 220px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.duplicates-panel.cdk-drop-list-receiving {
+  background: #e7f1ff;
+  border-color: #5a9dff;
+}
+
+.duplicates-title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.duplicates-empty {
+  color: #7b7b7b;
+  font-size: 13px;
+}
+
+.duplicates-list {
+  display: grid;
+  gap: 8px;
+}

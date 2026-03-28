@@ -9,7 +9,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { httpErrorInterceptor } from './api/core/http/http-error.interceptor';
+import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {

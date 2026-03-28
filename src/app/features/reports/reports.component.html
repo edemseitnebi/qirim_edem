@@ -1,0 +1,86 @@
+<div class="reports-page">
+  
+  <section class="reports-main">
+    <mat-card class="reports-card">
+      <div class="controls-row">
+
+        <app-reports-filters-bar
+          [dateRange]="dateRangeData"
+          (dateRangeChange)="onDateRangeChange($event)"
+          (apply)="applyDateRange()"
+        (clearRange)="clearDateRange()"
+        />
+
+        <app-reports-pagination
+          [paginatorData]="paginatorData"
+          (pageChange)="onPageChange($event)"
+          (pageSizeChange)="onPageSizeChange($event)"
+        />
+
+      </div>
+      <div class="table-container" [class.table-loading]="isLoading">
+        @if (isLoading) {
+          <div class="loading-wrap">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </div>
+        }
+        @let list = recordsData();
+        @if (list && list.fwbData.length > 0) {
+          <div
+            class="rows-drop-list"
+            cdkDropList
+            id="rows-drop-list"
+            [cdkDropListData]="list.fwbData"
+            [cdkDropListConnectedTo]="['duplicates-drop-list']"
+            [cdkDropListSortingDisabled]="true"
+          >
+            <table
+              mat-table
+              [dataSource]="list.fwbData"
+              class="reports-table"
+              matSort
+              [matSortActive]="activeSortName"
+              [matSortDirection]="sortDirection"
+              (matSortChange)="onMatSort($event)"
+            >
+              <ng-container matColumnDef="row">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div class="table-header">
+                    <span class="head-sort col-prefix" mat-sort-header="prefix">Prefix</span>
+                    <span class="head-sort col-serial" mat-sort-header="serial">Serial Nr</span>
+                    <span class="head-sort col-origin" mat-sort-header="origin">Origin</span>
+                    <span class="head-sort col-destination" mat-sort-header="destination">Destination</span>
+                    <span class="head-sort col-weight" mat-sort-header="act_weight">Actual Weight</span>
+                    <span class="head-sort col-unit" mat-sort-header="unit">Unit</span>
+                    <div class="actions-col col-actions"></div>
+                  </div>
+                </th>
+                <td mat-cell *matCellDef="let item" class="row-cell">
+                  <app-report-item
+                    [rowData]="buildRowData(item)"
+                    (rowClick)="onRowClick($event)"
+                  />
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="['row']; sticky: true"></tr>
+              <tr mat-row *matRowDef="let item; columns: ['row']"></tr>
+            </table>
+          </div>
+        } @else if (!isLoading && list && list.fwbData.length === 0) {
+          <div class="state empty-state">
+            <mat-icon>inbox</mat-icon>
+            <span>No data</span>
+          </div>
+        }
+      </div>
+    </mat-card>
+
+  </section>
+
+  <app-duplicates-panel
+    [duplicates]="duplicatesData"
+    (action)="onDuplicatesAction($event)"
+  />
+</div>
+

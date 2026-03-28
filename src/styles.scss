@@ -42,3 +42,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --mat-snack-bar-container-color: var(--mat-sys-error-container);
   --mat-snack-bar-supporting-text-color: var(--mat-sys-on-error-container);
 }
+
+.notification-error .mdc-snackbar__label {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}

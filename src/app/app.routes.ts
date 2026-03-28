@@ -1,5 +1,18 @@
 import { Routes } from '@angular/router';
 
-import { routes as pagesRoutes } from './routing/pages/pages-routing';
-
-export const routes: Routes = [...pagesRoutes];
+export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'reports',
+  },
+  {
+    path: 'reports',
+    loadComponent: () =>
+      import('./features/reports/reports.component').then((m) => m.ReportsComponent),
+  },
+  {
+    path: '**',
+    redirectTo: 'reports',
+  },
+];

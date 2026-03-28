@@ -1,0 +1,23 @@
+<aside
+  class="duplicates-panel"
+  cdkDropList
+  id="duplicates-drop-list"
+  [cdkDropListData]="duplicates"
+  [cdkDropListConnectedTo]="connectedDropLists"
+  [cdkDropListSortingDisabled]="true"
+  (cdkDropListDropped)="onDropped($event)"
+>
+  <div class="duplicates-title">Duplicated records</div>
+  @if (duplicates.length === 0) {
+    <div class="duplicates-empty">Drag a row from the table here</div>
+  } @else {
+    <div class="duplicates-list">
+      @for (duplicate of duplicates; track duplicate.id) {
+        <app-duplicate-item
+          [item]="duplicate"
+          (action)="onDuplicateItemAction($event)"
+        />
+      }
+    </div>
+  }
+</aside>

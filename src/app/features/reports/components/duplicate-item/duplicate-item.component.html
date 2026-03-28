@@ -1,0 +1,28 @@
+<mat-card class="duplicate-card" (click)="toggleExpanded()">
+  <div class="duplicate-header">
+    <div class="duplicate-main-info">
+      <span><strong>Prefix:</strong> {{ item.record.fWB_Details.AWB_Prefix }}</span>
+      <span><strong>Serial Nr:</strong> {{ item.record.fWB_Details.AWB_Serial }}</span>
+    </div>
+    <button
+      mat-icon-button
+      type="button"
+      (click)="removeItem($event)"
+      aria-label="remove duplicate"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (item.expanded) {
+    <mat-card-content class="duplicate-body">
+      <div><strong>Origin:</strong> {{ item.record.fWB_Details.AWB_Origin }}</div>
+      <div><strong>Destination:</strong> {{ item.record.fWB_Details.AWB_Destination }}</div>
+      <div><strong>Weight:</strong> {{ item.record.fWB_Details.Weight_Actual }}</div>
+      <div><strong>Unit:</strong> {{ item.record.fWB_Details.Weight_Identifier }}</div>
+      @if (item.record.agent_Details) {
+        <pre>{{ item.record.agent_Details | json }}</pre>
+      }
+    </mat-card-content>
+  }
+</mat-card>

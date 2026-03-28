@@ -1,0 +1,56 @@
+<div class="reports-pagination">
+  <ul class="reports-pagination__list">
+  <div class="reports-pagination__size">
+    <span class="reports-pagination__size-label">Rows per page:</span>
+    <mat-form-field class="reports-pagination__size-field" appearance="outline" subscriptSizing="dynamic">
+      <mat-select
+        [value]="pageSize"
+        (selectionChange)="onPageSizeSelectionChange($event.value)"
+      >
+        @for (option of pageSizeOptions; track option) {
+          <mat-option [value]="option">{{ option }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+    <li
+      class="reports-pagination__btn"
+      [class.reports-pagination__btn--active]="canGoPrev"
+      (click)="goPrev()"
+      (keydown)="onPrevKeydown($event)"
+      tabindex="0"
+      role="button"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </li>
+
+    @for (page of visiblePages; track $index) {
+      @if (page === 'dots') {
+        <li class="reports-pagination__dots">...</li>
+      } @else {
+        <li
+          class="reports-pagination__number"
+          [class.reports-pagination__number--active]="isCurrentPage(page)"
+          (click)="goToPage(page)"
+          (keydown)="onPageKeydown($event, page)"
+          tabindex="0"
+          role="button"
+        >
+          {{ page }}
+        </li>
+      }
+    }
+
+    <li
+      class="reports-pagination__btn"
+      [class.reports-pagination__btn--active]="canGoNext"
+      (click)="goNext()"
+      (keydown)="onNextKeydown($event)"
+      tabindex="0"
+      role="button"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </li>
+  </ul>
+</div>

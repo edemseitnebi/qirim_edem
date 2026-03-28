@@ -1,0 +1,127 @@
+//материал не поддерживает пагинацию по страницам, нужен кастомный пагинатор
+// https://codepen.io/arefeh_htmi/pen/ExKewzW
+
+.reports-pagination {
+  display: block;
+}
+
+.reports-pagination__size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.reports-pagination__size-label {
+  font-size: 12px;
+  color: #6f6f6f;
+  white-space: nowrap;
+}
+
+.reports-pagination__size-field {
+  width: 88px;
+}
+
+:host ::ng-deep .reports-pagination__size .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+:host ::ng-deep .reports-pagination__size .mat-mdc-form-field-infix {
+  min-height: 34px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.reports-pagination__list {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 40px;
+  margin: 0;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid #e1e1e1;
+  background: #fff;
+  list-style: none;
+}
+
+.reports-pagination__size {
+  margin-right: 8px;
+}
+
+.reports-pagination__number,
+.reports-pagination__btn,
+.reports-pagination__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0 4px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.reports-pagination__dots {
+  color: #a4a4a4;
+  cursor: default;
+}
+
+.reports-pagination__number {
+  color: #6f6f6f;
+  cursor: pointer;
+  user-select: none;
+}
+
+.reports-pagination__number:hover {
+  background: #efefef;
+}
+
+.reports-pagination__number--active {
+  color: #3f51b5;
+  background: transparent;
+  font-weight: 600;
+  border: 1px solid #3f51b5;
+}
+
+.reports-pagination__btn {
+  color: #b4b4b4;
+  pointer-events: none;
+}
+
+.reports-pagination__btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.reports-pagination__btn--active {
+  color: #6f6f6f;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.reports-pagination__btn--active:hover {
+  background: #efefef;
+}
+
+@media (max-width: 900px) {
+  .reports-pagination__list {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .reports-pagination__size {
+    width: 100%;
+    justify-content: center;
+    margin-right: 0;
+  }
+
+  .reports-pagination__list {
+    justify-content: center;
+  }
+}

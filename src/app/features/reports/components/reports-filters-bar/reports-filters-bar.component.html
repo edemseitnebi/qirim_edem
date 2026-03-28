@@ -1,0 +1,39 @@
+<div class="filters-row">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Date range</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input
+        matStartDate
+        placeholder="dd.mm.yyyy"
+        [value]="dateRange.fromDate"
+        (dateChange)="onFromDateInputChange($event.value)"
+      />
+      <input
+        matEndDate
+        placeholder="dd.mm.yyyy"
+        [value]="dateRange.untilDate"
+        (dateChange)="onUntilDateInputChange($event.value)"
+      />
+    </mat-date-range-input>
+    @if (hasDateRangeValue) {
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        class="date-suffix-btn"
+        aria-label="Clear date range"
+        (click)="clearDateRange($event)"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    } @else {
+      <mat-datepicker-toggle matSuffix class="date-suffix-btn" [for]="picker"></mat-datepicker-toggle>
+    }
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" type="button" (click)="onApplyClick()">
+    <mat-icon>search</mat-icon>
+    <span>Apply</span>
+  </button>
+</div>

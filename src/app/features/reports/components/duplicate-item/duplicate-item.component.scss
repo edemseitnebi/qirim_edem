@@ -1,0 +1,34 @@
+.duplicate-card {
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.duplicate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.duplicate-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.duplicate-body {
+  margin-top: 8px;
+  font-size: 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.duplicate-body pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
