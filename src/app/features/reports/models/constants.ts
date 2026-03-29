@@ -7,7 +7,7 @@ export const DEFAULT_FILTERS: GetFWBReportsParams = {
   sortName: '',
   from: '',
   until: '',
-};
+} as const;
 
 export const PARAM_KEYS = {
   pageNumber: 'pageNumber',

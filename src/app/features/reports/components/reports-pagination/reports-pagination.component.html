@@ -15,43 +15,43 @@
     </mat-form-field>
   </div>
 
-    <li
-      class="reports-pagination__btn"
-      [class.reports-pagination__btn--active]="canGoPrevSignal()"
-      (click)="goPrev()"
-      (keydown)="handleA11yKeydown($event, 'prev')"
-      tabindex="0"
-      role="button"
-    >
-      <mat-icon>chevron_left</mat-icon>
+    <li>
+      <button
+        type="button"
+        class="reports-pagination__btn"
+        [disabled]="!canGoPrevSignal()"
+        (click)="goPrev()"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
     </li>
 
     @for (page of visiblePagesSignal(); track $index) {
       @if (page === 'dots') {
         <li class="reports-pagination__dots">...</li>
       } @else {
-        <li
-          class="reports-pagination__number"
-          [class.reports-pagination__number--active]="isCurrentPage(page)"
-          (click)="goToPage(page)"
-          (keydown)="handleA11yKeydown($event, 'page', page)"
-          tabindex="0"
-          role="button"
-        >
-          {{ page }}
+        <li>
+          <button
+            type="button"
+            class="reports-pagination__number"
+            [class.reports-pagination__number--active]="page === pager.currentPage"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
         </li>
       }
     }
 
-    <li
-      class="reports-pagination__btn"
-      [class.reports-pagination__btn--active]="canGoNextSignal()"
-      (click)="goNext()"
-      (keydown)="handleA11yKeydown($event, 'next')"
-      tabindex="0"
-      role="button"
-    >
-      <mat-icon>chevron_right</mat-icon>
+    <li>
+      <button
+        type="button"
+        class="reports-pagination__btn"
+        [disabled]="!canGoNextSignal()"
+        (click)="goNext()"
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
     </li>
   </ul>
 </div>

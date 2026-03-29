@@ -7,7 +7,7 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 
-import { FWBRecord, ReportRowData, ReportsDateRangeData } from '@app/features/reports/models/interfaces';
+import { ReportRowData, ReportsDateRangeData } from '@app/features/reports/models/interfaces';
 import { DuplicatesPanelAction, ReportSortName } from '@app/features/reports/models/types';
 import { DuplicatesPanelComponent } from './components/duplicates-panel/duplicates-panel.component';
 import { ReportItemComponent } from './components/report-item/report-item.component';
@@ -83,9 +83,22 @@ export class ReportsComponent implements OnInit {
     };
   });
 
+  protected readonly tableRowsSignal = computed<ReportRowData[]>(() => {
+    const list = this.recordsDataSignal();
+    const expandedId = this.expandedRowsIdSignal();
+    if (!list?.fwbData.length) {
+      return [];
+    }
+    return list.fwbData.map((item) => ({
+      item,
+      expanded: expandedId === item.fWB_Details.Sequence,
+    }));
+  });
+
   public ngOnInit(): void {
     this.reportsService.syncUrlParams();
     this.initDateRangeFromFilters();
+    this.reportsService.getAllReports();
   }
 
   protected onMatSort(event: Sort): void {
@@ -108,13 +121,6 @@ export class ReportsComponent implements OnInit {
 
   protected onDateRangeChange(dateRange: ReportsDateRangeData): void {
     this.dateRangeSignal.set(dateRange);
-  }
-
-  protected buildRowData(item: FWBRecord): ReportRowData {
-    return {
-      item,
-      expanded: this.expandedRowsIdSignal() === item.fWB_Details.Sequence,
-    };
   }
 
   protected toggleRow(sequence: number): void {

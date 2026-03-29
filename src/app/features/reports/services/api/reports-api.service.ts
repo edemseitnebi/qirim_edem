@@ -4,7 +4,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { environment } from '@environments/environment';
 
 import { FWBRecordListApi, FWBRecordList, GetFWBReportsParams } from '@app/features/reports/models/interfaces';
-import { buildReportHttpParams, mapRecord } from './mapper';
+import { buildReportHttpParams, mapRecord } from '@app/features/reports/helpers/helpers';
 
 @Injectable()
 export class ReportsApiService {

@@ -24,7 +24,8 @@
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
         @let list = recordsDataSignal();
-        @if (list && list.fwbData.length > 0) {
+        @let rows = tableRowsSignal();
+        @if (list && rows.length > 0) {
           <div
             class="rows-drop-list"
             cdkDropList
@@ -35,7 +36,7 @@
           >
             <table
               mat-table
-              [dataSource]="list.fwbData"
+              [dataSource]="rows"
               class="reports-table"
               matSort
               [matSortActive]="activeSortNameSignal()"
@@ -56,7 +57,7 @@
                 </th>
                 <td mat-cell *matCellDef="let item" class="row-cell">
                   <app-report-item
-                    [rowData]="buildRowData(item)"
+                    [rowData]="item"
                     (rowClick)="toggleRow($event)"
                   />
                 </td>

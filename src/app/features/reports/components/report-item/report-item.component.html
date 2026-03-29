@@ -30,25 +30,9 @@
 
 @if (row.expanded) {
   <div class="report-expanded">
-    <div>
-      <strong>AWB ID:</strong>
-      {{ row.item.fWB_Details.AWBID }}
-    </div>
-    <div>
-      <strong>Pieces:</strong>
-      {{ row.item.fWB_Details.Pieces }}
-    </div>
-    <div>
-      <strong>Volume:</strong>
-      {{ row.item.fWB_Details.Volume ?? '—' }}
-    </div>
-    <div>
-      <strong>Goods:</strong>
-      {{ row.item.fWB_Details.Goods_Description }}
-    </div>
-    <div>
-      <strong>Modified:</strong>
-      {{ row.item.fWB_Details.ModifiedTime | date: 'dd.MM.yyyy HH:mm' }}
+    <div class="details-block">
+      <strong>fWB_Details:</strong>
+      <pre>{{ row.item.fWB_Details| json }}</pre>
     </div>
 
     @if (row.item.agent_Details) {

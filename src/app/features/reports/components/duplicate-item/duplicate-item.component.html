@@ -21,9 +21,6 @@
       <div><strong>Destination:</strong> {{ duplicateItem.record.fWB_Details.AWB_Destination }}</div>
       <div><strong>Weight:</strong> {{ duplicateItem.record.fWB_Details.Weight_Actual }}</div>
       <div><strong>Unit:</strong> {{ duplicateItem.record.fWB_Details.Weight_Identifier }}</div>
-      @if (duplicateItem.record.agent_Details) {
-        <pre>{{ duplicateItem.record.agent_Details | json }}</pre>
-      }
     </mat-card-content>
   }
 </mat-card>

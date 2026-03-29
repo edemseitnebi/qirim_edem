@@ -53,20 +53,8 @@ export class ReportsPaginationComponent {
     return pages;
   });
 
-  protected isCurrentPage(page: number): boolean {
-    return this.paginatorData().currentPage === page;
-  }
-
   protected onPageSizeSelectionChange(value: number | null | undefined): void {
     this.onPageSizeChanged(value ?? 0);
-  }
-
-  protected handleA11yKeydown(event: KeyboardEvent, action: 'prev' | 'next' | 'page', page?: number): void {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    if (action === 'prev') this.goPrev();
-    else if (action === 'next') this.goNext();
-    else if (page !== undefined) this.goToPage(page);
   }
 
   protected goToPage(page: number): void {

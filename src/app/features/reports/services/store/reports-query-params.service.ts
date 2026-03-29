@@ -9,7 +9,7 @@ import { DEFAULT_FILTERS, PARAM_KEYS } from '@app/features/reports/models/consta
 export class ReportsQueryParamsService {
   private readonly router = inject(Router);
 
-  readQueryParams(): GetFWBReportsParams {
+  public readQueryParams(): GetFWBReportsParams {
     const queryParams = this.router.parseUrl(this.router.url).queryParams;
     return {
       pageNumber: queryParams[PARAM_KEYS.pageNumber] ? Number(queryParams[PARAM_KEYS.pageNumber]) : DEFAULT_FILTERS.pageNumber,
@@ -21,7 +21,7 @@ export class ReportsQueryParamsService {
     };
   }
 
-  updateQueryParams(params: GetFWBReportsParams): void {
+  public updateQueryParams(params: GetFWBReportsParams): void {
     const queryParams: Record<string, string | number> = {
       [PARAM_KEYS.pageNumber]: params.pageNumber,
       [PARAM_KEYS.pageSize]: params.pageSize,

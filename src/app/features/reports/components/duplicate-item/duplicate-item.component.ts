@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { JsonPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +9,7 @@ import { DuplicateItemAction } from '@app/features/reports/models/types';
 @Component({
   selector: 'app-duplicate-item',
   standalone: true,
-  imports: [JsonPipe, MatButtonModule, MatCardModule, MatIconModule],
+  imports: [ MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './duplicate-item.component.html',
   styleUrl: './duplicate-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

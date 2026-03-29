@@ -46,15 +46,31 @@
   margin-right: 8px;
 }
 
+.reports-pagination__list > li {
+  margin: 0 4px;
+}
+
 .reports-pagination__number,
-.reports-pagination__btn,
+.reports-pagination__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  padding: 0;
+  border-radius: 6px;
+  font-size: 13px;
+  font: inherit;
+  background: transparent;
+}
+
 .reports-pagination__dots {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 28px;
   height: 28px;
-  margin: 0 4px;
   border-radius: 6px;
   font-size: 13px;
 }
@@ -83,23 +99,21 @@
 
 .reports-pagination__btn {
   color: #b4b4b4;
-  pointer-events: none;
+}
+
+.reports-pagination__btn:not(:disabled) {
+  color: colors.$text-muted;
+  cursor: pointer;
+}
+
+.reports-pagination__btn:not(:disabled):hover {
+  background: #efefef;
 }
 
 .reports-pagination__btn mat-icon {
   font-size: 20px;
   width: 20px;
   height: 20px;
-}
-
-.reports-pagination__btn--active {
-  color: colors.$text-muted;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.reports-pagination__btn--active:hover {
-  background: #efefef;
 }
 
 @media (max-width: 900px) {

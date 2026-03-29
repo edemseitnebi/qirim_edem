@@ -27,7 +27,7 @@ export class ReportItemComponent {
   }
 
   protected onRowKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
+    if (event.key !== 'Enter' ) return;
     event.preventDefault();
     this.onRowClicked();
   }
