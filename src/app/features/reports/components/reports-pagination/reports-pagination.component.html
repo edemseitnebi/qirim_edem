@@ -1,13 +1,14 @@
+@let pager = paginatorData();
 <div class="reports-pagination">
   <ul class="reports-pagination__list">
   <div class="reports-pagination__size">
     <span class="reports-pagination__size-label">Rows per page:</span>
     <mat-form-field class="reports-pagination__size-field" appearance="outline" subscriptSizing="dynamic">
       <mat-select
-        [value]="paginatorData.pageSize"
+        [value]="pager.pageSize"
         (selectionChange)="onPageSizeSelectionChange($event.value)"
       >
-        @for (option of paginatorData.pageSizeOptions; track option) {
+        @for (option of pager.pageSizeOptions; track option) {
           <mat-option [value]="option">{{ option }}</mat-option>
         }
       </mat-select>
@@ -16,7 +17,7 @@
 
     <li
       class="reports-pagination__btn"
-      [class.reports-pagination__btn--active]="canGoPrev"
+      [class.reports-pagination__btn--active]="canGoPrevSignal()"
       (click)="goPrev()"
       (keydown)="handleA11yKeydown($event, 'prev')"
       tabindex="0"
@@ -25,7 +26,7 @@
       <mat-icon>chevron_left</mat-icon>
     </li>
 
-    @for (page of visiblePages; track $index) {
+    @for (page of visiblePagesSignal(); track $index) {
       @if (page === 'dots') {
         <li class="reports-pagination__dots">...</li>
       } @else {
@@ -44,7 +45,7 @@
 
     <li
       class="reports-pagination__btn"
-      [class.reports-pagination__btn--active]="canGoNext"
+      [class.reports-pagination__btn--active]="canGoNextSignal()"
       (click)="goNext()"
       (keydown)="handleA11yKeydown($event, 'next')"
       tabindex="0"

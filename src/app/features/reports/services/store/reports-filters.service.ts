@@ -1,19 +1,19 @@
 import { Injectable, inject, signal } from '@angular/core';
 
-import { GetFWBReportsParams } from '@app/features/reports/services/api/type';
+import { GetFWBReportsParams } from '@app/features/reports/models/interfaces';
 import { ReportsQueryParamsService } from './reports-query-params.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ReportsFiltersService {
   private readonly queryParams = inject(ReportsQueryParamsService);
-  readonly filters = signal<GetFWBReportsParams>(this.queryParams.readQueryParams());
+  readonly filtersSignal = signal<GetFWBReportsParams>(this.queryParams.readQueryParams());
 
   syncQueryParams(): void {
-    this.queryParams.updateQueryParams(this.filters());
+    this.queryParams.updateQueryParams(this.filtersSignal());
   }
 
   updateFilters(next: GetFWBReportsParams): void {
     this.queryParams.updateQueryParams(next);
-    this.filters.set(next);
+    this.filtersSignal.set(next);
   }
 }

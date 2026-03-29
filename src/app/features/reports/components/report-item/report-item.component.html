@@ -1,68 +1,69 @@
+@let row = rowData();
 <div
   class="report-row"
-  [class.highlight]="isHighlighted"
+  [class.highlight]="isHighlightedSignal()"
   cdkDrag
-  [cdkDragData]="rowData.item"
+  [cdkDragData]="row.item"
   (click)="onRowClicked()"
   (keydown)="onRowKeydown($event)"
   tabindex="0"
 >
   <div class="cell col-prefix card-main-cell">
     <span class="cell-label">Prefix</span>
-    <span class="cell-value">{{ rowData.item.fWB_Details.AWB_Prefix }}</span>
+    <span class="cell-value">{{ row.item.fWB_Details.AWB_Prefix }}</span>
   </div>
   <div class="cell col-serial card-main-cell">
     <span class="cell-label">Serial Nr</span>
-    <span class="cell-value">{{ rowData.item.fWB_Details.AWB_Serial }}</span>
+    <span class="cell-value">{{ row.item.fWB_Details.AWB_Serial }}</span>
   </div>
-  <div class="cell col-origin">{{ rowData.item.fWB_Details.AWB_Origin }}</div>
-  <div class="cell col-destination">{{ rowData.item.fWB_Details.AWB_Destination }}</div>
-  <div class="cell col-weight">{{ rowData.item.fWB_Details.Weight_Actual }}</div>
-  <div class="cell col-unit">{{ rowData.item.fWB_Details.Weight_Identifier }}</div>
+  <div class="cell col-origin">{{ row.item.fWB_Details.AWB_Origin }}</div>
+  <div class="cell col-destination">{{ row.item.fWB_Details.AWB_Destination }}</div>
+  <div class="cell col-weight">{{ row.item.fWB_Details.Weight_Actual }}</div>
+  <div class="cell col-unit">{{ row.item.fWB_Details.Weight_Identifier }}</div>
   <div class="cell expand-cell col-actions">
-    <mat-icon>{{ expandIcon }}</mat-icon>
+    <mat-icon>{{ expandIconSignal() }}</mat-icon>
     <button type="button" class="drag-handle" cdkDragHandle (click)="onDragHandleClick($event)">
       <mat-icon>content_copy</mat-icon>
     </button>
   </div>
 </div>
 
-@if (rowData.expanded) {
+@if (row.expanded) {
   <div class="report-expanded">
     <div>
       <strong>AWB ID:</strong>
-      {{ rowData.item.fWB_Details.AWBID }}
+      {{ row.item.fWB_Details.AWBID }}
     </div>
     <div>
       <strong>Pieces:</strong>
-      {{ rowData.item.fWB_Details.Pieces }}
+      {{ row.item.fWB_Details.Pieces }}
     </div>
     <div>
       <strong>Volume:</strong>
-      {{ volumeText }}
+      {{ row.item.fWB_Details.Volume ?? '—' }}
     </div>
     <div>
       <strong>Goods:</strong>
-      {{ rowData.item.fWB_Details.Goods_Description }}
+      {{ row.item.fWB_Details.Goods_Description }}
     </div>
     <div>
       <strong>Modified:</strong>
-      {{ rowData.item.fWB_Details.ModifiedTime | date: 'dd.MM.yyyy HH:mm' }}
+      {{ row.item.fWB_Details.ModifiedTime | date: 'dd.MM.yyyy HH:mm' }}
     </div>
 
-    @if (rowData.item.agent_Details) {
+    @if (row.item.agent_Details) {
       <div class="details-block">
         <strong>Agent details:</strong>
-        <pre>{{ rowData.item.agent_Details | json }}</pre>
+        <pre>{{ row.item.agent_Details | json }}</pre>
       </div>
     }
     <div class="details-block">
       <strong>Shipper details:</strong>
-      <pre>{{ rowData.item.shipper_Details | json }}</pre>
+      <pre>{{ row.item.shipper_Details | json }}</pre>
     </div>
     <div class="details-block">
       <strong>Consignee details:</strong>
-      <pre>{{ rowData.item.consignee_Details | json }}</pre>
+      <pre>{{ row.item.consignee_Details | json }}</pre>
     </div>
   </div>
 }

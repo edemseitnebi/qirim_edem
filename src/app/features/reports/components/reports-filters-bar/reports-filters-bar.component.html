@@ -1,3 +1,4 @@
+@let range = dateRange();
 <div class="filters-row">
   <mat-form-field class="filters-row__date-field" appearance="outline" subscriptSizing="dynamic">
     <mat-label>Date range</mat-label>
@@ -5,17 +6,17 @@
       <input
         matStartDate
         placeholder="dd.mm.yyyy"
-        [value]="dateRange.fromDate"
+        [value]="range.fromDate"
         (dateChange)="onDateInputChange('from', $event.value)"
       />
       <input
         matEndDate
         placeholder="dd.mm.yyyy"
-        [value]="dateRange.untilDate"
+        [value]="range.untilDate"
         (dateChange)="onDateInputChange('until', $event.value)"
       />
     </mat-date-range-input>
-    @if (hasDateRangeValue) {
+    @if (hasDateRangeValueSignal()) {
       <button
         mat-icon-button
         matSuffix

@@ -1,3 +1,5 @@
+export type AgentDetailsApi = Record<string, string | number | null>;
+
 export interface GetFWBReportsParams {
   pageNumber: number;
   pageSize: number;
@@ -5,18 +7,6 @@ export interface GetFWBReportsParams {
   sortName?: string;
   from?: string;
   until?: string;
-}
-
-export interface FWBRecordListApi {
-  fwb_data: FWBRecordApi[];
-  totalRecords: number;
-}
-
-export interface FWBRecordApi {
-  fWB_Details: FWBDetailsApi;
-  agent_Details: AgentDetailsApi | null;
-  shipper_Details: ShipperDetailsApi;
-  consignee_Details: ConsigneeDetailsApi;
 }
 
 export interface FWBDetailsApi {
@@ -37,8 +27,6 @@ export interface FWBDetailsApi {
   ConsigneeId: number;
   ModifiedTime: string;
 }
-
-export type AgentDetailsApi = Record<string, string | number | null>;
 
 export interface ShipperDetailsApi {
   Sequence: number;
@@ -62,16 +50,16 @@ export interface ConsigneeDetailsApi {
   Post_Code: string;
 }
 
-export interface FWBRecordList {
-  fwbData: FWBRecord[];
-  totalRecords: number;
-}
-
-export interface FWBRecord {
-  fWB_Details: FWBDetails;
+export interface FWBRecordApi {
+  fWB_Details: FWBDetailsApi;
   agent_Details: AgentDetailsApi | null;
   shipper_Details: ShipperDetailsApi;
   consignee_Details: ConsigneeDetailsApi;
+}
+
+export interface FWBRecordListApi {
+  fwb_data: FWBRecordApi[];
+  totalRecords: number;
 }
 
 export interface FWBDetails {
@@ -91,4 +79,39 @@ export interface FWBDetails {
   ShipperId: number;
   ConsigneeId: number;
   ModifiedTime: Date;
+}
+
+export interface FWBRecord {
+  fWB_Details: FWBDetails;
+  agent_Details: AgentDetailsApi | null;
+  shipper_Details: ShipperDetailsApi;
+  consignee_Details: ConsigneeDetailsApi;
+}
+
+export interface FWBRecordList {
+  fwbData: FWBRecord[];
+  totalRecords: number;
+}
+
+export interface DuplicateRecord {
+  id: number;
+  record: FWBRecord;
+  expanded: boolean;
+}
+
+export interface ReportsDateRangeData {
+  fromDate: Date | null;
+  untilDate: Date | null;
+}
+
+export interface ReportRowData {
+  item: FWBRecord;
+  expanded: boolean;
+}
+
+export interface PaginatorData {
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  pageSizeOptions: number[];
 }

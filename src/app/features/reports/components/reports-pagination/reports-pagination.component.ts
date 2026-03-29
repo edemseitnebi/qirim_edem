@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { PaginatorData } from '@app/features/reports/services/facade/type';
+import { PaginatorData } from '@app/features/reports/models/interfaces';
 
 @Component({
   selector: 'app-reports-pagination',
@@ -10,15 +10,19 @@ import { PaginatorData } from '@app/features/reports/services/facade/type';
   imports: [MatFormFieldModule, MatIconModule, MatSelectModule],
   templateUrl: './reports-pagination.component.html',
   styleUrl: './reports-pagination.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsPaginationComponent {
-  @Input({ required: true }) public paginatorData!: PaginatorData;
-  @Output() public readonly pageChange = new EventEmitter<number>();
-  @Output() public readonly pageSizeChange = new EventEmitter<number>();
+  public readonly paginatorData = input.required<PaginatorData>();
+  public readonly pageChange = output<number>();
+  public readonly pageSizeChange = output<number>();
 
-  protected get visiblePages(): (number | 'dots')[] {
-    const total = Math.max(1, this.paginatorData.totalPages);
-    const current = Math.min(Math.max(1, this.paginatorData.currentPage), total);
+  protected readonly canGoPrevSignal = computed(() => this.paginatorData().currentPage > 1);
+  protected readonly canGoNextSignal = computed(() => this.paginatorData().currentPage < this.paginatorData().totalPages);
+
+  protected readonly visiblePagesSignal = computed<(number | 'dots')[]>(() => {
+    const total = Math.max(1, this.paginatorData().totalPages);
+    const current = Math.min(Math.max(1, this.paginatorData().currentPage), total);
 
     if (total <= 5) {
       return Array.from({ length: total }, (_, index) => index + 1);
@@ -46,20 +50,11 @@ export class ReportsPaginationComponent {
     }
 
     pages.push(total);
-
     return pages;
-  }
-
-  protected get canGoPrev(): boolean {
-    return this.paginatorData.currentPage > 1;
-  }
-
-  protected get canGoNext(): boolean {
-    return this.paginatorData.currentPage < this.paginatorData.totalPages;
-  }
+  });
 
   protected isCurrentPage(page: number): boolean {
-    return this.paginatorData.currentPage === page;
+    return this.paginatorData().currentPage === page;
   }
 
   protected onPageSizeSelectionChange(value: number | null | undefined): void {
@@ -75,26 +70,21 @@ export class ReportsPaginationComponent {
   }
 
   protected goToPage(page: number): void {
-    if (page < 1 || page > this.paginatorData.totalPages || page === this.paginatorData.currentPage) {
-      return;
-    }
-
+    const { currentPage, totalPages } = this.paginatorData();
+    if (page < 1 || page > totalPages || page === currentPage) return;
     this.pageChange.emit(page);
   }
 
   protected goPrev(): void {
-    this.goToPage(this.paginatorData.currentPage - 1);
+    this.goToPage(this.paginatorData().currentPage - 1);
   }
 
   protected goNext(): void {
-    this.goToPage(this.paginatorData.currentPage + 1);
+    this.goToPage(this.paginatorData().currentPage + 1);
   }
 
   protected onPageSizeChanged(nextPageSize: number): void {
-    if (!nextPageSize || nextPageSize === this.paginatorData.pageSize) {
-      return;
-    }
-
+    if (!nextPageSize || nextPageSize === this.paginatorData().pageSize) return;
     this.pageSizeChange.emit(nextPageSize);
   }
 }

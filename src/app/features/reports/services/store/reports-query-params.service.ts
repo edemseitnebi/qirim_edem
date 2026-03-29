@@ -1,13 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { GetFWBReportsParams } from '@app/features/reports/services/api/type';
-import { DEFAULT_FILTERS, PARAM_KEYS } from './type';
+import { GetFWBReportsParams } from '@app/features/reports/models/interfaces';
+import { DEFAULT_FILTERS, PARAM_KEYS } from '@app/features/reports/models/constants';
 
-//чтобы юзеры могли делиться ссылками и фильтра автоматически подтягивались при инициализации страницы пишем
-//фильтра в url
-
-@Injectable({ providedIn: 'root' })
+// фильтры пишутся в url чтобы юзеры могли делиться ссылками
+@Injectable()
 export class ReportsQueryParamsService {
   private readonly router = inject(Router);
 
@@ -29,21 +27,10 @@ export class ReportsQueryParamsService {
       [PARAM_KEYS.pageSize]: params.pageSize,
     };
 
-    if (params.sortOrder) {
-      queryParams[PARAM_KEYS.sortOrder] = params.sortOrder;
-    }
-
-    if (params.sortName) {
-      queryParams[PARAM_KEYS.sortName] = params.sortName;
-    }
-
-    if (params.from) {
-      queryParams[PARAM_KEYS.from] = params.from;
-    }
-
-    if (params.until) {
-      queryParams[PARAM_KEYS.until] = params.until;
-    }
+    if (params.sortOrder) queryParams[PARAM_KEYS.sortOrder] = params.sortOrder;
+    if (params.sortName) queryParams[PARAM_KEYS.sortName] = params.sortName;
+    if (params.from) queryParams[PARAM_KEYS.from] = params.from;
+    if (params.until) queryParams[PARAM_KEYS.until] = params.until;
 
     void this.router.navigate([], {
       queryParams,

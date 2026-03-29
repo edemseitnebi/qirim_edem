@@ -1,8 +1,9 @@
+@let duplicateItem = item();
 <mat-card class="duplicate-card" (click)="toggleExpanded()">
   <div class="duplicate-header">
     <div class="duplicate-main-info">
-      <span><strong>Prefix:</strong> {{ item.record.fWB_Details.AWB_Prefix }}</span>
-      <span><strong>Serial Nr:</strong> {{ item.record.fWB_Details.AWB_Serial }}</span>
+      <span><strong>Prefix:</strong> {{ duplicateItem.record.fWB_Details.AWB_Prefix }}</span>
+      <span><strong>Serial Nr:</strong> {{ duplicateItem.record.fWB_Details.AWB_Serial }}</span>
     </div>
     <button
       mat-icon-button
@@ -14,14 +15,14 @@
     </button>
   </div>
 
-  @if (item.expanded) {
+  @if (duplicateItem.expanded) {
     <mat-card-content class="duplicate-body">
-      <div><strong>Origin:</strong> {{ item.record.fWB_Details.AWB_Origin }}</div>
-      <div><strong>Destination:</strong> {{ item.record.fWB_Details.AWB_Destination }}</div>
-      <div><strong>Weight:</strong> {{ item.record.fWB_Details.Weight_Actual }}</div>
-      <div><strong>Unit:</strong> {{ item.record.fWB_Details.Weight_Identifier }}</div>
-      @if (item.record.agent_Details) {
-        <pre>{{ item.record.agent_Details | json }}</pre>
+      <div><strong>Origin:</strong> {{ duplicateItem.record.fWB_Details.AWB_Origin }}</div>
+      <div><strong>Destination:</strong> {{ duplicateItem.record.fWB_Details.AWB_Destination }}</div>
+      <div><strong>Weight:</strong> {{ duplicateItem.record.fWB_Details.Weight_Actual }}</div>
+      <div><strong>Unit:</strong> {{ duplicateItem.record.fWB_Details.Weight_Identifier }}</div>
+      @if (duplicateItem.record.agent_Details) {
+        <pre>{{ duplicateItem.record.agent_Details | json }}</pre>
       }
     </mat-card-content>
   }

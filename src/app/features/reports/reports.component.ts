@@ -1,4 +1,4 @@
-import { Component, OnInit, Signal, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,13 +7,17 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 
-import { FWBRecord, FWBRecordList, GetFWBReportsParams } from '@app/features/reports/services/api/type';
+import { FWBRecord, ReportRowData, ReportsDateRangeData } from '@app/features/reports/models/interfaces';
+import { DuplicatesPanelAction, ReportSortName } from '@app/features/reports/models/types';
 import { DuplicatesPanelComponent } from './components/duplicates-panel/duplicates-panel.component';
 import { ReportItemComponent } from './components/report-item/report-item.component';
 import { ReportsFiltersBarComponent } from './components/reports-filters-bar/reports-filters-bar.component';
 import { ReportsPaginationComponent } from './components/reports-pagination/reports-pagination.component';
-import { ReportsFacadeService } from './services/facade/reports-facade.service';
-import { DuplicateRecord, DuplicatesPanelAction, PaginatorData, ReportRowData, ReportsDateRangeData, ReportSortName } from './services/facade/type';
+import { ReportsService } from './services/reports.service';
+import { ReportsStoreService } from './services/store/reports-store.service';
+import { ReportsFiltersService } from './services/store/reports-filters.service';
+import { ReportsQueryParamsService } from './services/store/reports-query-params.service';
+import { ReportsApiService } from './services/api/reports-api.service';
 
 @Component({
   selector: 'app-reports',
@@ -33,146 +37,117 @@ import { DuplicateRecord, DuplicatesPanelAction, PaginatorData, ReportRowData, R
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    ReportsQueryParamsService,
+    ReportsFiltersService,
+    ReportsApiService,
+    ReportsStoreService,
+    ReportsService,
   ],
 })
 export class ReportsComponent implements OnInit {
-  private readonly facade = inject(ReportsFacadeService);
-  protected readonly dateRange = signal<ReportsDateRangeData>({
-    fromDate: null,
-    untilDate: null,
-  });
-  protected readonly loading: Signal<boolean> = this.facade.loading;
-  protected readonly recordsData: Signal<FWBRecordList | null | undefined> = this.facade.recordsList;
-  protected readonly filters: Signal<GetFWBReportsParams> = this.facade.filters;
-  protected readonly expandedRowId: Signal<number | null> = this.facade.expandedRowId;
-  protected readonly duplicates: Signal<DuplicateRecord[]> = this.facade.duplicates;
+  private readonly reportsService = inject(ReportsService);
 
-  protected get sortDirection(): SortDirection {
-    const sortOrder = this.filters().sortOrder;
+  protected readonly isLoadingSignal = this.reportsService.loadingSignal;
+  protected readonly recordsDataSignal = this.reportsService.recordsListSignal;
+  protected readonly filtersSignal = this.reportsService.filtersSignal;
+  protected readonly expandedRowsIdSignal = this.reportsService.expandedRowIdSignal;
+  protected readonly duplicatesSignal = this.reportsService.duplicatesListSignal;
+
+  protected readonly dateRangeSignal = signal<ReportsDateRangeData>({ fromDate: null, untilDate: null });
+
+  protected readonly sortDirectionSignal = computed<SortDirection>(() => {
+    const sortOrder = this.filtersSignal().sortOrder;
     return sortOrder === 'asc' || sortOrder === 'desc' ? sortOrder : '';
-  }
+  });
 
-  protected get isLoading(): boolean {
-    return this.loading();
-  }
-
-  protected get activeSortName(): ReportSortName | '' {
-    const sortName = this.filters().sortName ?? '';
+  protected readonly activeSortNameSignal = computed<ReportSortName | ''>(() => {
+    const sortName = this.filtersSignal().sortName ?? '';
     return this.isReportSortName(sortName) ? sortName : '';
-  }
+  });
 
-  protected get currentPage(): number {
-    return this.filters().pageNumber;
-  }
+  protected readonly paginatorDataSignal = computed(() => {
+    const filters = this.filtersSignal();
+    const totalRecords = this.recordsDataSignal()?.totalRecords ?? 0;
+    const totalPages = !totalRecords || !filters.pageSize
+      ? 1
+      : Math.max(1, Math.ceil(totalRecords / filters.pageSize));
 
-  protected get totalPages(): number {
-    const totalRecords = this.recordsData()?.totalRecords ?? 0;
-    const pageSize = this.filters().pageSize;
-
-    if (!totalRecords || !pageSize) {
-      return 1;
-    }
-
-    return Math.max(1, Math.ceil(totalRecords / pageSize));
-  }
-
-  protected get paginatorData(): PaginatorData {
     return {
-      currentPage: this.currentPage,
-      totalPages: this.totalPages,
-      pageSize: this.filters().pageSize,
+      currentPage: filters.pageNumber,
+      totalPages,
+      pageSize: filters.pageSize,
       pageSizeOptions: [10, 25, 50],
     };
-  }
-
-  protected get dateRangeData(): ReportsDateRangeData {
-    return this.dateRange();
-  }
-
-  protected get duplicatesData(): DuplicateRecord[] {
-    return this.duplicates();
-  }
+  });
 
   public ngOnInit(): void {
-    this.facade.syncQueryParamsOnInit();
+    this.reportsService.syncUrlParams();
     this.initDateRangeFromFilters();
   }
 
   protected onMatSort(event: Sort): void {
     if (!this.isReportSortName(event.active) || (event.direction !== 'asc' && event.direction !== 'desc')) {
-      this.facade.setSortState('', '');
+      this.reportsService.setSortState('', '');
       return;
     }
-    this.facade.setSortState(event.active, event.direction);
+    this.reportsService.setSortState(event.active, event.direction);
   }
 
   protected applyDateRange(): void {
-    const dateRange = this.dateRange();
-    this.facade.setDateRange(this.formatDate(dateRange.fromDate), this.formatDate(dateRange.untilDate));
+    const { fromDate, untilDate } = this.dateRangeSignal();
+    this.reportsService.setDateRange(this.formatDate(fromDate), this.formatDate(untilDate));
   }
 
   protected clearDateRange(): void {
-    this.dateRange.set({
-      fromDate: null,
-      untilDate: null,
-    });
-    this.facade.setDateRange('', '');
+    this.dateRangeSignal.set({ fromDate: null, untilDate: null });
+    this.reportsService.setDateRange('', '');
   }
 
   protected onDateRangeChange(dateRange: ReportsDateRangeData): void {
-    this.dateRange.set(dateRange);
+    this.dateRangeSignal.set(dateRange);
   }
 
   protected buildRowData(item: FWBRecord): ReportRowData {
     return {
       item,
-      expanded: this.expandedRowId() === item.fWB_Details.Sequence,
+      expanded: this.expandedRowsIdSignal() === item.fWB_Details.Sequence,
     };
   }
 
   protected toggleRow(sequence: number): void {
-    this.facade.toggleRow(sequence);
-  }
-
-  protected onRowClick(sequence: number): void {
-    this.toggleRow(sequence);
+    this.reportsService.toggleRow(sequence);
   }
 
   protected onDuplicatesAction(action: DuplicatesPanelAction): void {
     if (action.type === 'drop') {
-      this.facade.addDuplicate(action.record);
+      this.reportsService.addDuplicate(action.record);
       return;
     }
-
     if (action.type === 'toggle') {
-      this.facade.toggleDuplicate(action.id);
+      this.reportsService.toggleDuplicate(action.id);
       return;
     }
-
-    this.facade.removeDuplicate(action.id);
+    this.reportsService.removeDuplicate(action.id);
   }
 
   protected onPageChange(page: number): void {
-    this.facade.setPage(page - 1, this.filters().pageSize);
+    this.reportsService.setPage(page - 1, this.filtersSignal().pageSize);
   }
 
   protected onPageSizeChange(pageSize: number): void {
-    this.facade.setPage(0, pageSize);
+    this.reportsService.setPage(0, pageSize);
   }
 
   private formatDate(date: Date | null): string {
-    if (!date) {
-      return '';
-    }
-
-    return date.toISOString().replace('Z', '+00:00');
+    return date ? date.toISOString().replace('Z', '+00:00') : '';
   }
 
   private initDateRangeFromFilters(): void {
-    const { from, until } = this.filters();
-    this.dateRange.set({
+    const { from, until } = this.filtersSignal();
+    this.dateRangeSignal.set({
       fromDate: from ? new Date(from) : null,
       untilDate: until ? new Date(until) : null,
     });

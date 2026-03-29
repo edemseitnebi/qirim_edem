@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 
-import { FWBRecord } from '@app/features/reports/services/api/type';
-import { DuplicateItemAction, DuplicateRecord, DuplicatesPanelAction } from '@app/features/reports/services/facade/type';
+import { FWBRecord, DuplicateRecord } from '@app/features/reports/models/interfaces';
+import { DuplicateItemAction, DuplicatesPanelAction } from '@app/features/reports/models/types';
 import { DuplicateItemComponent } from '../duplicate-item/duplicate-item.component';
 
 @Component({
@@ -11,11 +11,13 @@ import { DuplicateItemComponent } from '../duplicate-item/duplicate-item.compone
   imports: [DragDropModule, DuplicateItemComponent],
   templateUrl: './duplicates-panel.component.html',
   styleUrl: './duplicates-panel.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuplicatesPanelComponent {
   protected readonly connectedDropLists: string[] = ['rows-drop-list'];
-  @Input({ required: true }) public duplicates!: DuplicateRecord[];
-  @Output() public readonly action = new EventEmitter<DuplicatesPanelAction>();
+
+  public readonly duplicates = input.required<DuplicateRecord[]>();
+  public readonly action = output<DuplicatesPanelAction>();
 
   protected onDropped(event: CdkDragDrop<DuplicateRecord[], FWBRecord[], FWBRecord>): void {
     if (event.item.data) {
@@ -23,7 +25,7 @@ export class DuplicatesPanelComponent {
     }
   }
 
-  protected onDuplicateItemAction(action: DuplicateItemAction): void {
-    this.action.emit(action);
+  protected onDuplicateItemAction(itemAction: DuplicateItemAction): void {
+    this.action.emit(itemAction);
   }
 }

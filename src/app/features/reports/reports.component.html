@@ -1,28 +1,29 @@
+@let loading = isLoadingSignal();
 <div class="reports-page">
-  
+
   <section class="reports-main">
     <mat-card class="reports-card">
       <div class="controls-row">
 
         <app-reports-filters-bar
-          [dateRange]="dateRangeData"
+          [dateRange]="dateRangeSignal()"
           (dateRangeChange)="onDateRangeChange($event)"
           (apply)="applyDateRange()"
-        (clearRange)="clearDateRange()"
+          (clearRange)="clearDateRange()"
         />
 
         <app-reports-pagination
-          [paginatorData]="paginatorData"
+          [paginatorData]="paginatorDataSignal()"
           (pageChange)="onPageChange($event)"
           (pageSizeChange)="onPageSizeChange($event)"
         />
 
       </div>
-      <div class="table-container" [class.table-loading]="isLoading">
-        <div class="loading-wrap" [class.loading-wrap--active]="isLoading">
+      <div class="table-container" [class.table-loading]="loading">
+        <div class="loading-wrap" [class.loading-wrap--active]="loading">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
-        @let list = recordsData();
+        @let list = recordsDataSignal();
         @if (list && list.fwbData.length > 0) {
           <div
             class="rows-drop-list"
@@ -37,8 +38,8 @@
               [dataSource]="list.fwbData"
               class="reports-table"
               matSort
-              [matSortActive]="activeSortName"
-              [matSortDirection]="sortDirection"
+              [matSortActive]="activeSortNameSignal()"
+              [matSortDirection]="sortDirectionSignal()"
               (matSortChange)="onMatSort($event)"
             >
               <ng-container matColumnDef="row">
@@ -56,7 +57,7 @@
                 <td mat-cell *matCellDef="let item" class="row-cell">
                   <app-report-item
                     [rowData]="buildRowData(item)"
-                    (rowClick)="onRowClick($event)"
+                    (rowClick)="toggleRow($event)"
                   />
                 </td>
               </ng-container>
@@ -65,7 +66,7 @@
               <tr mat-row *matRowDef="let item; columns: ['row']"></tr>
             </table>
           </div>
-        } @else if (!isLoading && list && list.fwbData.length === 0) {
+        } @else if (!loading && list && list.fwbData.length === 0) {
           <div class="state empty-state">
             <mat-icon>inbox</mat-icon>
             <span>No data</span>
@@ -77,8 +78,7 @@
   </section>
 
   <app-duplicates-panel
-    [duplicates]="duplicatesData"
+    [duplicates]="duplicatesSignal()"
     (action)="onDuplicatesAction($event)"
   />
 </div>
-
