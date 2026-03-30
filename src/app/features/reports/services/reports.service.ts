@@ -1,29 +1,25 @@
-//фасад для reports
 import { DestroyRef, Injectable, inject } from '@angular/core';
 
 import { FWBRecord, GetFWBReportsParams } from '@app/features/reports/models/interfaces';
 import { ReportSortName, ReportSortOrder } from '@app/features/reports/models/types';
 import { ReportsStoreService } from './store/reports-store.service';
-import { ReportsFiltersService } from './store/reports-filters.service';
 import { distinctUntilChanged, finalize, Observable, switchMap } from 'rxjs';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ReportsApiService } from '@app/features/reports/services/api/reports-api.service';
 
 @Injectable()
 export class ReportsService {
-  private readonly store = inject(ReportsStoreService);
-  private readonly filtersService = inject(ReportsFiltersService);
-  private readonly apiService = inject(ReportsApiService);
-
   private readonly destroyRef = inject(DestroyRef);
+  private readonly store = inject(ReportsStoreService);
+  private readonly apiService = inject(ReportsApiService);
 
   public readonly loadingSignal = this.store.isLoadingSignal;
   public readonly recordsListSignal = this.store.reportsListSignal;
   public readonly expandedRowIdSignal = this.store.expandedRowIdSignal;
   public readonly duplicatesListSignal = this.store.duplicatesSignal;
-  public readonly filtersSignal = this.filtersService.filtersSignal.asReadonly();
+  public readonly filtersSignal = this.store.filtersSignal;
 
-  private readonly filters$: Observable<GetFWBReportsParams> = toObservable(this.filtersService.filtersSignal);
+  private readonly filters$: Observable<GetFWBReportsParams> = toObservable(this.store.filtersSignal);
 
   public getAllReports(): void {
     this.filters$.pipe(
@@ -39,7 +35,7 @@ export class ReportsService {
   }
 
   public syncUrlParams(): void {
-    this.filtersService.syncQueryParams();
+    this.store.syncQueryParams();
   }
 
   public setSortState(sortName: ReportSortName | '', sortOrder: ReportSortOrder): void {
@@ -78,7 +74,7 @@ export class ReportsService {
   }
 
   private applyFilters(params: Partial<GetFWBReportsParams>): void {
-    this.filtersService.updateFilters({ ...this.filtersSignal(), ...params });
+    this.store.updateFilters({ ...this.filtersSignal(), ...params });
   }
 
   private paramsEqual(a: GetFWBReportsParams, b: GetFWBReportsParams): boolean {

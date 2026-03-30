@@ -1,9 +1,17 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 
-import { FWBRecord, FWBRecordList, DuplicateRecord } from '@app/features/reports/models/interfaces';
+import {
+  FWBRecord,
+  FWBRecordList,
+  DuplicateRecord,
+  GetFWBReportsParams,
+} from '@app/features/reports/models/interfaces';
+import { ReportsQueryParamsService } from './reports-query-params.service';
 
 @Injectable()
 export class ReportsStoreService {
+  private readonly queryParams = inject(ReportsQueryParamsService);
+
   private readonly reportsList = signal<FWBRecordList | null>(null);
   private readonly isLoading = signal<boolean>(true);
 
@@ -11,10 +19,13 @@ export class ReportsStoreService {
   private readonly duplicates = signal<DuplicateRecord[]>([]);
   private duplicateIdCounter = 0;
 
+  private readonly filters = signal<GetFWBReportsParams>(this.queryParams.readQueryParams());
+
   public readonly reportsListSignal = this.reportsList.asReadonly();
   public readonly isLoadingSignal = this.isLoading.asReadonly();
   public readonly expandedRowIdSignal = this.expandedRowId.asReadonly();
   public readonly duplicatesSignal = this.duplicates.asReadonly();
+  public readonly filtersSignal = this.filters.asReadonly();
 
   public setReportsList(data: FWBRecordList | null): void {
     this.reportsList.set(data);
@@ -22,6 +33,15 @@ export class ReportsStoreService {
 
   public setIsLoading(data: boolean): void {
     this.isLoading.set(data);
+  }
+
+  public syncQueryParams(): void {
+    this.queryParams.updateQueryParams(this.filters());
+  }
+
+  public updateFilters(next: GetFWBReportsParams): void {
+    this.queryParams.updateQueryParams(next);
+    this.filters.set(next);
   }
 
   public toggleRow(sequence: number): void {

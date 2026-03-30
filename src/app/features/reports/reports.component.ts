@@ -15,7 +15,6 @@ import { ReportsFiltersBarComponent } from './components/reports-filters-bar/rep
 import { ReportsPaginationComponent } from './components/reports-pagination/reports-pagination.component';
 import { ReportsService } from './services/reports.service';
 import { ReportsStoreService } from './services/store/reports-store.service';
-import { ReportsFiltersService } from './services/store/reports-filters.service';
 import { ReportsQueryParamsService } from './services/store/reports-query-params.service';
 import { ReportsApiService } from './services/api/reports-api.service';
 
@@ -41,7 +40,6 @@ import { ReportsApiService } from './services/api/reports-api.service';
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     ReportsQueryParamsService,
-    ReportsFiltersService,
     ReportsApiService,
     ReportsStoreService,
     ReportsService,

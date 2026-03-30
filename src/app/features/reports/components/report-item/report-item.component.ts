@@ -1,4 +1,4 @@
-import { DatePipe, JsonPipe } from '@angular/common';
+import {  JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,7 +8,7 @@ import { ReportRowData } from '@app/features/reports/models/interfaces';
 @Component({
   selector: 'app-report-item',
   standalone: true,
-  imports: [CdkDrag, CdkDragHandle, DatePipe, JsonPipe, MatIconModule],
+  imports: [CdkDrag, CdkDragHandle, JsonPipe, MatIconModule],
   templateUrl: './report-item.component.html',
   styleUrl: './report-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
